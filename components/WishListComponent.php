@@ -2,8 +2,9 @@
 
 namespace panix\mod\wishlist\components;
 
+use Yii;
 use panix\mod\shop\models\ShopProduct;
-
+use panix\mod\wishlist\models\Wishlist;
 class WishListComponent extends \yii\base\Component {
 
     /**
@@ -48,7 +49,7 @@ class WishListComponent extends \yii\base\Component {
      * @return boolean
      */
     public function add($id) {
-        if ($this->count() <= self::MAX_PRODUCTS && ShopProduct::find()->published()->countByAttributes(array('id' => $id)) > 0) {
+        if ($this->count() <= self::MAX_PRODUCTS && ShopProduct::find()->where(['id' => $id])->published()->count() > 0) {
             $current = $this->getIds();
             $current[(int) $id] = (int) $id;
             $this->setIds($current);
@@ -123,11 +124,11 @@ class WishListComponent extends \yii\base\Component {
      */
     public function getModel() {
         if ($this->_model === null) {
-            $model = Wishlist::find()->findByAttributes(array(
-                'user_id' => $this->getUserId()
-            ));
-            if ($model === null)
-                $model = Wishlist::find()->create($this->getUserId());
+            $model = Wishlist::find(['user_id' => $this->getUserId()])->one();
+            if ($model === null){
+                $model = new Wishlist;
+                $model->creater($this->getUserId());
+            }
             $this->_model = $model;
         }
         return $this->_model;
@@ -138,7 +139,7 @@ class WishListComponent extends \yii\base\Component {
      */
     public function getProducts() {
         if ($this->_products === null)
-            $this->_products = ShopProduct::model()->findAllByPk(array_values($this->getIds()));
+            $this->_products = ShopProduct::find()->where(array_values($this->getIds()))->all();
         return $this->_products;
     }
 
@@ -154,7 +155,7 @@ class WishListComponent extends \yii\base\Component {
      * @return string
      */
     public function getUrl() {
-        return Yii::app()->createAbsoluteUrl('/wishlist/default/view', array('key' => $this->getModel()->key));
+        return Yii::$app->urlManager->createAbsoluteUrl(['/wishlist/default/view', 'key' => $this->getModel()->key]);
     }
 
     /**
@@ -163,9 +164,7 @@ class WishListComponent extends \yii\base\Component {
      * @throws CException
      */
     public function loadByKey($key) {
-        $model = Wishlist::model()->findByAttributes(array(
-            'key' => $key,
-        ));
+        $model = Wishlist::find(['key' => $key])->one();
         if ($model === null)
             throw new CException();
         $this->_model = $model;

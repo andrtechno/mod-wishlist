@@ -1,6 +1,10 @@
 <?php
 
-use \panix\engine\controllers\WebController;
+namespace panix\mod\wishlist\controllers;
+
+use Yii;
+use panix\engine\controllers\WebController;
+use panix\mod\wishlist\components\WishListComponent;
 
 class DefaultController extends WebController {
 
@@ -8,8 +12,6 @@ class DefaultController extends WebController {
      * @var Wishlist
      */
     public $model;
-
-
 
     public function beforeAction($action) {
         if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
@@ -30,10 +32,10 @@ class DefaultController extends WebController {
     public function actionIndex() {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
         $this->breadcrumbs[] = [
-            'label'=>$this->pageName,
-            'url'=>['/wishlist']
-   ];
-       return $this->render('index');
+            'label' => $this->pageName,
+            'url' => ['/wishlist']
+        ];
+        return $this->render('index');
     }
 
     /**
@@ -49,7 +51,7 @@ class DefaultController extends WebController {
         } else {
             echo Json::encode(array(
                 'message' => $message,
-                'btn_message'=>Yii::t('wishlist/default','BTN_WISHLIST'),
+                'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
                 'count' => $this->model->count()
             ));
         }
