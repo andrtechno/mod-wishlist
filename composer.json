@@ -3,7 +3,7 @@
     "description": "Module wishlist",
     "keywords": ["corner-cms", "module", "wishlist"],
     "homepage": "https://github.com/andrtechno/mod-wishlist",
-    "type": "module",
+    "type": "yii2-extension",
     "license": "BSD 3-Clause",
     "authors": [
         {
