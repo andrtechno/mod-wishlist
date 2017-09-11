@@ -17,7 +17,7 @@ class DefaultController extends WebController {
         if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
             Yii::$app->user->returnUrl = Yii::$app->request->getUrl();
             if (Yii::$app->request->isAjax)
-                throw new CHttpException(302);
+                throw new \yii\web\HttpException(302);
             else
                 return $this->redirect(Yii::$app->user->loginUrl);
         }
@@ -45,11 +45,12 @@ class DefaultController extends WebController {
     public function actionAdd($id) {
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
-        $this->addFlashMessage($message);
+        //$this->addFlashMessage($message);
+        Yii::$app->session->setFlash('success',$message);
         if (!Yii::$app->request->isAjax) {
-            return $this->redirect($this->createUrl('index'));
+            return $this->redirect(['index']);
         } else {
-            echo Json::encode(array(
+            echo \yii\helpers\Json::encode(array(
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
                 'count' => $this->model->count()
@@ -76,9 +77,10 @@ class DefaultController extends WebController {
      * @param string $id product id
      */
     public function actionRemove($id) {
+
         $this->model->remove($id);
         if (!Yii::$app->request->isAjax)
-            return $this->redirect($this->createUrl('index'));
+            return $this->redirect(['index']);
     }
 
 }

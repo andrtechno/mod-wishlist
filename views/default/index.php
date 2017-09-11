@@ -9,9 +9,7 @@
     <div class="products_list wish_list">
         <?php
         foreach ($this->context->model->products as $p) {
-            return $this->render('_product', array(
-                'data' => $p,
-            ));
+            echo $this->render('_product', ['data' => $p]);
         }
         ?>
     </div>

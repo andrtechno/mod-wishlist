@@ -30,9 +30,10 @@ class Wishlist extends \panix\engine\db\ActiveRecord {
      * @param array $ids
      */
     public function setIds(array $ids) {
-        WishlistProducts::model()->deleteAll(['wishlist_id' => $this->id]);
+        WishlistProducts::deleteAll(['wishlist_id' => $this->id]);
 
         if (!empty($ids)) {
+
             foreach ($ids as $id) {
                 $record = new WishlistProducts;
                 $record->wishlist_id = $this->id;

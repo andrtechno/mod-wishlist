@@ -49,7 +49,7 @@ class WishListComponent extends \yii\base\Component {
      * @return boolean
      */
     public function add($id) {
-        if ($this->count() <= self::MAX_PRODUCTS && ShopProduct::find()->where(['id' => $id])->published()->count() > 0) {
+        if ($this->count() <= self::MAX_PRODUCTS && ShopProduct::find(['id' => $id])->published()->count() > 0) {
             $current = $this->getIds();
             $current[(int) $id] = (int) $id;
             $this->setIds($current);
@@ -70,6 +70,7 @@ class WishListComponent extends \yii\base\Component {
      */
     public function remove($id) {
         $current = $this->getIds();
+
         $pos = array_search($id, $current);
         if (isset($current[$pos]))
             unset($current[$pos]);
@@ -139,7 +140,7 @@ class WishListComponent extends \yii\base\Component {
      */
     public function getProducts() {
         if ($this->_products === null)
-            $this->_products = ShopProduct::find()->where(array_values($this->getIds()))->all();
+            $this->_products = ShopProduct::find(['id'=>array_values($this->getIds())])->all();
         return $this->_products;
     }
 
@@ -166,7 +167,7 @@ class WishListComponent extends \yii\base\Component {
     public function loadByKey($key) {
         $model = Wishlist::find(['key' => $key])->one();
         if ($model === null)
-            throw new CException();
+            throw new \Exception();
         $this->_model = $model;
         $this->_user_id = $model->user_id;
         return $model;

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 
             <?php
 
-            echo Html::a(Html::img($data->getMainImageUrl('240x240'), $data->mainImageTitle, array('class' => 'img-responsive', 'height' => 240)), $data->getUrl(), array('class' => ''));
+            echo Html::a(Html::img($data->getMainImageUrl('240x240'), ['alt'=>$data->mainImageTitle,'class' => 'img-responsive', 'height' => 240]), $data->getUrl(), array('class' => ''));
             ?>
         </div>
 </div>
