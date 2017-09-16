@@ -40,7 +40,7 @@ class DefaultController extends WebController {
 
     /**
      * Add product to wish list
-     * @param $id ShopProduct id
+     * @param $id Product id
      */
     public function actionAdd($id) {
         $this->model->add($id);

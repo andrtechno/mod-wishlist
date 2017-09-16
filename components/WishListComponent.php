@@ -3,7 +3,7 @@
 namespace panix\mod\wishlist\components;
 
 use Yii;
-use panix\mod\shop\models\ShopProduct;
+use panix\mod\shop\models\Product;
 use panix\mod\wishlist\models\Wishlist;
 class WishListComponent extends \yii\base\Component {
 
@@ -49,7 +49,7 @@ class WishListComponent extends \yii\base\Component {
      * @return boolean
      */
     public function add($id) {
-        if ($this->count() <= self::MAX_PRODUCTS && ShopProduct::find(['id' => $id])->published()->count() > 0) {
+        if ($this->count() <= self::MAX_PRODUCTS && Product::find(['id' => $id])->published()->count() > 0) {
             $current = $this->getIds();
             $current[(int) $id] = (int) $id;
             $this->setIds($current);
@@ -136,11 +136,11 @@ class WishListComponent extends \yii\base\Component {
     }
 
     /**
-     * @return array of ShopProduct models to wish list
+     * @return array of Product models to wish list
      */
     public function getProducts() {
         if ($this->_products === null)
-            $this->_products = ShopProduct::find(['id'=>array_values($this->getIds())])->all();
+            $this->_products = Product::find(['id'=>array_values($this->getIds())])->all();
         return $this->_products;
     }
 
