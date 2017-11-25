@@ -31,6 +31,7 @@ class DefaultController extends WebController {
      */
     public function actionIndex() {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
+        $this->title = $this->pageName;
         $this->breadcrumbs[] = [
             'label' => $this->pageName,
             'url' => ['/wishlist']
@@ -46,7 +47,7 @@ class DefaultController extends WebController {
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
         //$this->addFlashMessage($message);
-        Yii::$app->session->setFlash('success',$message);
+        Yii::$app->session->setFlash('success', $message);
         if (!Yii::$app->request->isAjax) {
             return $this->redirect(['index']);
         } else {
