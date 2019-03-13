@@ -5,7 +5,9 @@ namespace panix\mod\wishlist\components;
 use Yii;
 use panix\mod\shop\models\Product;
 use panix\mod\wishlist\models\Wishlist;
-class WishListComponent extends \yii\base\Component {
+use yii\base\Component;
+
+class WishListComponent extends Component {
 
     /**
      * Максимальное количество товаров могут быть добавлены к списку желаний
@@ -18,7 +20,7 @@ class WishListComponent extends \yii\base\Component {
     private $_products;
 
     /**
-     * @var ShopWishlist
+     * @var Wishlist
      */
     private $_model;
 
@@ -35,6 +37,8 @@ class WishListComponent extends \yii\base\Component {
             $this->_user_id = $user_id;
         else
             $this->_user_id = Yii::$app->user->id;
+
+        parent::__construct([]);
     }
 
     /**
@@ -125,7 +129,8 @@ class WishListComponent extends \yii\base\Component {
      */
     public function getModel() {
         if ($this->_model === null) {
-            $model = Wishlist::find(['user_id' => $this->getUserId()])->one();
+            $model = Wishlist::findOne(['user_id'=>$this->getUserId()]);
+           // $model = Wishlist::find(['user_id' => $this->getUserId()])->one();
             if ($model === null){
                 $model = new Wishlist;
                 $model->creater($this->getUserId());
@@ -139,8 +144,10 @@ class WishListComponent extends \yii\base\Component {
      * @return array of Product models to wish list
      */
     public function getProducts() {
-        if ($this->_products === null)
-            $this->_products = Product::find(['id'=>array_values($this->getIds())])->all();
+
+        if ($this->_products === null){
+            $this->_products = Product::findAll(['id'=>array_values($this->getIds())]);
+        }
         return $this->_products;
     }
 
@@ -165,7 +172,9 @@ class WishListComponent extends \yii\base\Component {
      * @throws CException
      */
     public function loadByKey($key) {
-        $model = Wishlist::find(['key' => $key])->one();
+       // $model = Wishlist::find(['key' => $key])->one();
+        $model = Wishlist::findOne(['key' => $key]);
+
         if ($model === null)
             throw new \Exception();
         $this->_model = $model;

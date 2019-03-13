@@ -2,18 +2,25 @@
 
 namespace panix\mod\wishlist;
 
-class Module extends \panix\engine\WebModule {
+use panix\engine\WebModule;
+use yii\base\BootstrapInterface;
 
-    public $routes = [
-        'wishlist' => 'wishlist/default/index',
-        'wishlist/add/<id>' => 'wishlist/default/add',
-        'wishlist/remove/<id>' => 'wishlist/default/remove',
-        'wishlist/view/<key>' => 'wishlist/default/view',
-    ];
+class Module extends WebModule implements BootstrapInterface {
 
-    public function init() {
+    public function bootstrap($app)
+    {
+        $app->urlManager->addRules(
+            [
+                'wishlist' => 'wishlist/default/index',
+                'wishlist/add/<id>' => 'wishlist/default/add',
+                'wishlist/remove/<id>' => 'wishlist/default/remove',
+                'wishlist/view/<key>' => 'wishlist/default/view',
+            ],
+            false
+        );
 
-        parent::init();
+        $app->setComponents([
+            'wishlist' => ['class' => 'panix\mod\wishlist\components\WishlistComponent'],
+        ]);
     }
-
 }

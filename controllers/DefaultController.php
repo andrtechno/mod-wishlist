@@ -2,14 +2,16 @@
 
 namespace panix\mod\wishlist\controllers;
 
+
 use Yii;
 use panix\engine\controllers\WebController;
 use panix\mod\wishlist\components\WishListComponent;
+use yii\web\HttpException;
 
 class DefaultController extends WebController {
 
     /**
-     * @var Wishlist
+     * @var \panix\mod\wishlist\models\Wishlist
      */
     public $model;
 
@@ -17,12 +19,12 @@ class DefaultController extends WebController {
         if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
             Yii::$app->user->returnUrl = Yii::$app->request->getUrl();
             if (Yii::$app->request->isAjax)
-                throw new \yii\web\HttpException(302);
+                throw new HttpException(302);
             else
                 return $this->redirect(Yii::$app->user->loginUrl);
         }
 
-        $this->model = new WishListComponent();
+       // $this->model = new WishListComponent();
         return true;
     }
 
@@ -31,19 +33,22 @@ class DefaultController extends WebController {
      */
     public function actionIndex() {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
-        $this->title = $this->pageName;
         $this->breadcrumbs[] = [
             'label' => $this->pageName,
             'url' => ['/wishlist']
         ];
+       // $this->model = new WishListComponent();
         return $this->render('index');
     }
 
     /**
      * Add product to wish list
-     * @param $id Product id
+     *
+     * @param $id \panix\mod\shop\models\Product id
+     * @return \yii\web\Response
      */
     public function actionAdd($id) {
+        /* @method add \panix\mod\wishlist\models\Wishlist */
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
         //$this->addFlashMessage($message);
@@ -60,13 +65,15 @@ class DefaultController extends WebController {
     }
 
     /**
+     *
+     *
      * @param $key
-     * @throws CHttpException
+     * @return string
      */
     public function actionView($key) {
         try {
             $this->model->loadByKey($key);
-        } catch (CException $e) {
+        } catch (HttpException $e) {
             $this->error404(Yii::t('wishlist/default', 'ERROR_VIEW'));
         }
 
@@ -75,7 +82,9 @@ class DefaultController extends WebController {
 
     /**
      * Remove product from list
-     * @param string $id product id
+     *
+     * @param $id \panix\mod\shop\models\Product id
+     * @return \yii\web\Response
      */
     public function actionRemove($id) {
 
