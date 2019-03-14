@@ -28,13 +28,13 @@ class m170910_040208_wishlist extends Migration {
                 ], $tableOptions);
 
 
-        $this->createIndex('user_id', '{{%wishlist}}', 'user_id', 0);
-        $this->createIndex('key', '{{%wishlist}}', 'key', 0);
+        $this->createIndex('user_id', '{{%wishlist}}', 'user_id');
+        $this->createIndex('key', '{{%wishlist}}', 'key');
 
 
-        $this->createIndex('wishlist_id', '{{%wishlist_products}}', 'wishlist_id', 0);
-        $this->createIndex('product_id', '{{%wishlist_products}}', 'product_id', 0);
-        $this->createIndex('user_id', '{{%wishlist_products}}', 'user_id', 0);
+        $this->createIndex('wishlist_id', '{{%wishlist_products}}', 'wishlist_id');
+        $this->createIndex('product_id', '{{%wishlist_products}}', 'product_id');
+        $this->createIndex('user_id', '{{%wishlist_products}}', 'user_id');
     }
 
     public function down() {
