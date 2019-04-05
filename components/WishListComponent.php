@@ -53,7 +53,7 @@ class WishListComponent extends Component {
      * @return boolean
      */
     public function add($id) {
-        if ($this->count() <= self::MAX_PRODUCTS && Product::find(['id' => $id])->published()->count() > 0) {
+        if ($this->count() <= self::MAX_PRODUCTS && Product::find()->where(['id' => $id])->published()->count() > 0) {
             $current = $this->getIds();
             $current[(int) $id] = (int) $id;
             $this->setIds($current);
