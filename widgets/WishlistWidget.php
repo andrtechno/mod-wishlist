@@ -1,28 +1,50 @@
 <?php
 
+namespace panix\mod\wishlist\widgets;
 
-class WishlistWidget extends yii\base\Widget {
+use Yii;
+use panix\engine\data\Widget;
+use panix\mod\wishlist\components\WishListComponent;
+use yii\base\InvalidArgumentException;
+/**
+ * Widget add to wishlist module for shop.
+ *
+ * @version 1.0
+ * @author PIXELION CMS development team <dev@pixelion.com.ua>
+ * @link http://pixelion.com.ua PIXELION CMS
+ *
+ * Example:
+ * <code>
+ * echo \panix\mod\wishlist\widgets\WishlistWidget::widget([
+ *  'pk' => $model->primaryKey,
+ *  'skin' => 'icon',
+ *  'linkOptions' => ['class' => 'btn btn-compare']
+ * ]);
+ * </code>
+ *
+ */
+class WishlistWidget extends Widget
+{
 
-    public $registerFile = array('wishlist.js');
     public $pk;
-    public $linkOptions = array();
+    public $linkOptions = [];
     public $isAdded = false;
 
-    public function init() {
+    public function init()
+    {
 
-        Yii::import('mod.wishlist.WishlistModule');
         if (is_null($this->pk))
-            throw new CException(Yii::t('WishlistWidget.default', 'ERROR_PK_ISNULL'));
+            throw new InvalidArgumentException(Yii::t('WishlistWidget.default', 'ERROR_PK_ISNULL'));
 
-        $this->assetsPath = dirname(__FILE__) . '/assets';
         parent::init();
     }
 
-    public function run() {
+    public function run()
+    {
 
         $wishListComponent = new WishListComponent();
         $this->isAdded = (in_array($this->pk, $wishListComponent->getIds())) ? true : false;
-        $linkOptions = array();
+        $linkOptions = [];
 
         $class = ($this->isAdded) ? 'added' : '';
         $linkOptions['class'] = '';
@@ -33,8 +55,7 @@ class WishlistWidget extends yii\base\Widget {
         $linkOptions['id'] = 'wishlist-' . $this->pk;
 
         $this->linkOptions = $linkOptions;
-        $this->render($this->skin, array(
-        ));
+        return $this->render($this->skin, []);
     }
 
 }

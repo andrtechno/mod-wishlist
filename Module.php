@@ -12,8 +12,8 @@ class Module extends WebModule implements BootstrapInterface {
         $app->urlManager->addRules(
             [
                 'wishlist' => 'wishlist/default/index',
-                'wishlist/add/<id>' => 'wishlist/default/add',
-                'wishlist/remove/<id>' => 'wishlist/default/remove',
+                'wishlist/add/<id:\d+>' => 'wishlist/default/add',
+                'wishlist/remove/<id:\d+>' => 'wishlist/default/remove',
                 'wishlist/view/<key>' => 'wishlist/default/view',
             ],
             false

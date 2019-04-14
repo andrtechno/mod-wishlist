@@ -1,10 +1,10 @@
 <?php
-
-if (!$this->isAdded) {
-    if (Yii::app()->user->isGuest) {
-        echo Html::link(Yii::t('WishlistModule.default', 'BTN_WISHLIST', 0), array('/users/register'), $this->linkOptions);
+use panix\engine\Html;
+if (!$this->context->isAdded) {
+    if (Yii::$app->user->isGuest) {
+        echo Html::a(Yii::t('wishlist/default', 'BTN_WISHLIST', 0), ['/users/register'], $this->context->linkOptions);
     } else {
-        echo Html::link(Yii::t('WishlistModule.default', 'BTN_WISHLIST', 1), 'javascript:wishlist.add(' . $this->pk . ');', $this->linkOptions);
+        echo Html::a(Yii::t('wishlist/default', 'BTN_WISHLIST', 1), 'javascript:wishlist.add(' . $this->context->pk . ');', $this->context->linkOptions);
     }
 } else {
     echo 'already wishlist';

@@ -2,7 +2,9 @@
 
 namespace panix\mod\wishlist\assets;
 
-class WishlistAsset extends \yii\web\AssetBundle
+use panix\engine\web\AssetBundle;
+
+class WishlistAsset extends AssetBundle
 {
 
     public $sourcePath = __DIR__;
@@ -11,5 +13,7 @@ class WishlistAsset extends \yii\web\AssetBundle
         'js/wishlist.js',
     ];
 
-
+    public $depends = [
+        'yii\web\JqueryAsset',
+    ];
 }

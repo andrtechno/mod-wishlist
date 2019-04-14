@@ -1,9 +1,9 @@
 <?php
-
-if (!$this->isAdded) {
-    if (Yii::app()->user->isGuest) {
-        echo Html::link(Html::tag('i', array('class' => 'icon-heart'), '', true), array('/users/register'), $this->linkOptions);
+use panix\engine\Html;
+if (!$this->context->isAdded) {
+    if (Yii::$app->user->isGuest) {
+        echo Html::a(Html::icon('icon-heart'), array('/users/register'), $this->context->linkOptions);
     } else {
-        echo Html::link(Html::tag('i', array('class' => 'icon-heart'), '', true), 'javascript:wishlist.add(' . $this->pk . ');', $this->linkOptions);
+        echo Html::a(Html::icon('icon-heart'), 'javascript:wishlist.add(' . $this->context->pk . ');', $this->context->linkOptions);
     }
 }

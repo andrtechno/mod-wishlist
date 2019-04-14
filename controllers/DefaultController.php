@@ -7,15 +7,18 @@ use Yii;
 use panix\engine\controllers\WebController;
 use panix\mod\wishlist\components\WishListComponent;
 use yii\web\HttpException;
+use yii\web\Response;
 
-class DefaultController extends WebController {
+class DefaultController extends WebController
+{
 
     /**
      * @var \panix\mod\wishlist\models\Wishlist
      */
     public $model;
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
             Yii::$app->user->returnUrl = Yii::$app->request->getUrl();
             if (Yii::$app->request->isAjax)
@@ -24,20 +27,21 @@ class DefaultController extends WebController {
                 return $this->redirect(Yii::$app->user->loginUrl);
         }
 
-       // $this->model = new WishListComponent();
+        $this->model = new WishListComponent();
         return true;
     }
 
     /**
      * Render index view
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
         $this->breadcrumbs[] = [
             'label' => $this->pageName,
             'url' => ['/wishlist']
         ];
-       // $this->model = new WishListComponent();
+        // $this->model = new WishListComponent();
         return $this->render('index');
     }
 
@@ -47,7 +51,8 @@ class DefaultController extends WebController {
      * @param $id \panix\mod\shop\models\Product id
      * @return \yii\web\Response
      */
-    public function actionAdd($id) {
+    public function actionAdd($id)
+    {
         /* @method add \panix\mod\wishlist\models\Wishlist */
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
@@ -56,11 +61,13 @@ class DefaultController extends WebController {
         if (!Yii::$app->request->isAjax) {
             return $this->redirect(['index']);
         } else {
-            echo \yii\helpers\Json::encode(array(
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            Yii::$app->response->data = [
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
                 'count' => $this->model->count()
-            ));
+            ];
         }
     }
 
@@ -70,7 +77,8 @@ class DefaultController extends WebController {
      * @param $key
      * @return string
      */
-    public function actionView($key) {
+    public function actionView($key)
+    {
         try {
             $this->model->loadByKey($key);
         } catch (HttpException $e) {
@@ -86,7 +94,8 @@ class DefaultController extends WebController {
      * @param $id \panix\mod\shop\models\Product id
      * @return \yii\web\Response
      */
-    public function actionRemove($id) {
+    public function actionRemove($id)
+    {
 
         $this->model->remove($id);
         if (!Yii::$app->request->isAjax)
