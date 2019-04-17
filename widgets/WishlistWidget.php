@@ -46,7 +46,7 @@ class WishlistWidget extends Widget
 
         if($this->isAdded){
             $this->linkOptions['title']=Yii::t('wishlist/default','ALREADY_EXIST');
-            $this->linkOptions['class'] .= ' added disabled';
+            $this->linkOptions['class'] .= ' added';
         }
 
         return $this->render($this->skin, []);
