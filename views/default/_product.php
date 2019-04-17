@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Html;
 
+/**
+ * @var $data \panix\mod\shop\models\Product;
+ */
 ?>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 product text-left">
     <div class="product-box">
@@ -9,7 +12,7 @@ use yii\helpers\Html;
 
                 <?php
 
-                echo Html::a(Html::img($data->getMainImageUrl('240x240'), ['alt' => $data->mainImageTitle, 'class' => 'img-responsive', 'height' => 240]), $data->getUrl(), array('class' => ''));
+                echo Html::a(Html::img($data->getMainImage('240x240')->url, ['alt' => '', 'class' => 'img-fluid', 'height' => 240]), $data->getUrl(), array('class' => ''));
                 ?>
             </div>
         </div>
@@ -33,13 +36,13 @@ use yii\helpers\Html;
         echo $data->beginCartForm();
         ?>
         <div class="text-center product-action">
-            <div class="btn-group btn-group-sm">
+            <div class="btn-group">
                 <?php
                 if (Yii::$app->hasModule('compare')) {
                     //$this->widget('mod.compare.widgets.CompareWidget', array('pk' => $data->id));
                 }
                 if ($data->isAvailable) {
-                    echo Html::a(Yii::t('app', 'BUY'), 'javascript:cart.add("#form-add-cart-' . $data->id . '")', array('class' => 'btn btn-success'));
+                    echo Html::a(Yii::t('cart/default', 'BUY'), 'javascript:cart.add("#form-add-cart-' . $data->id . '")', array('class' => 'btn btn-warning'));
                 } else {
                     echo Html::a(Yii::t('app', 'NOT_AVAILABLE'), 'javascript:cart.notifier(' . $data->id . ');', array('class' => 'btn btn-link'));
                 }
@@ -48,9 +51,9 @@ use yii\helpers\Html;
         </div>
         <?php
         if ($component->getUserId() === Yii::$app->user->id) {
-            echo Html::a(Yii::t('app', 'DELETE'), array('remove', 'id' => $data->id), array(
-                'class' => 'btn btn-primary remove',
-            ));
+            echo Html::a(Yii::t('app', 'DELETE'), ['remove', 'id' => $data->id], [
+                'class' => 'btn btn-danger remove',
+            ]);
         } else {
             echo 'no user';
         }

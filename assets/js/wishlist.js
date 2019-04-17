@@ -1,17 +1,29 @@
-var wishlist = window.wishlist || {};
-wishlist = {
-    add: function (product_id) {
-        $.ajax({
-            url: '/wishlist/add/' + product_id,
-            dataType: 'json',
+$(function () {
+    var xhr;
+    $(document).on('click', '.btn-wishlist:not(.added)', function (e) {
+        var that = $(this);
+
+        if (xhr && xhr.readyState !== 4) {
+            xhr.onreadystatechange = null;
+            xhr.abort();
+        }
+
+        xhr = $.ajax({
+            url: that.attr('href'),
             type: 'GET',
+            dataType: 'json',
             success: function (data) {
                 $('#countWishlist').html(data.count);
                 common.notify(data.message, 'success');
-                var selector = $('#wishlist-' + product_id);
-                selector.addClass('added');
+                that.addClass('added');
+                //that.addClass('disabled');
+                that.attr('title',data.title);
             }
         });
 
-    }
-}
+    });
+    $(document).on('click', '.btn-wishlist', function (e) {
+        e.preventDefault();
+        return false;
+    });
+});

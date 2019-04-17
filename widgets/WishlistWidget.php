@@ -32,7 +32,6 @@ class WishlistWidget extends Widget
 
     public function init()
     {
-
         if (is_null($this->pk))
             throw new InvalidArgumentException(Yii::t('WishlistWidget.default', 'ERROR_PK_ISNULL'));
 
@@ -44,17 +43,12 @@ class WishlistWidget extends Widget
 
         $wishListComponent = new WishListComponent();
         $this->isAdded = (in_array($this->pk, $wishListComponent->getIds())) ? true : false;
-        $linkOptions = [];
 
-        $class = ($this->isAdded) ? 'added' : '';
-        $linkOptions['class'] = '';
-        if (isset($this->linkOptions['class'])) {
-            $linkOptions['class'] .= $this->linkOptions['class'];
+        if($this->isAdded){
+            $this->linkOptions['title']=Yii::t('wishlist/default','ALREADY_EXIST');
+            $this->linkOptions['class'] .= ' added disabled';
         }
-        $linkOptions['class'] .= ' ' . $class;
-        $linkOptions['id'] = 'wishlist-' . $this->pk;
 
-        $this->linkOptions = $linkOptions;
         return $this->render($this->skin, []);
     }
 

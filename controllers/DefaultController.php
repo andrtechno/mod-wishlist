@@ -66,7 +66,8 @@ class DefaultController extends WebController
             Yii::$app->response->data = [
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
-                'count' => $this->model->count()
+                'count' => $this->model->count(),
+                'title'=>Yii::t('wishlist/default','ALREADY_EXIST')
             ];
         }
     }
