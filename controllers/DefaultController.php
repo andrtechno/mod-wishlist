@@ -13,7 +13,7 @@ class DefaultController extends WebController
 {
 
     /**
-     * @var \panix\mod\wishlist\models\Wishlist
+     * @var \panix\mod\wishlist\components\WishListComponent
      */
     public $model;
 
@@ -28,7 +28,7 @@ class DefaultController extends WebController
         }
 
         $this->model = new WishListComponent();
-        return true;
+        return parent::beforeAction($action);
     }
 
     /**
@@ -53,7 +53,6 @@ class DefaultController extends WebController
      */
     public function actionAdd($id)
     {
-        /* @method add \panix\mod\wishlist\models\Wishlist */
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
         //$this->addFlashMessage($message);
@@ -92,7 +91,7 @@ class DefaultController extends WebController
     /**
      * Remove product from list
      *
-     * @param $id \panix\mod\shop\models\Product id
+     * @param int $id \panix\mod\shop\models\Product id
      * @return \yii\web\Response
      */
     public function actionRemove($id)

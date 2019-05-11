@@ -29,7 +29,7 @@ $component = Yii::$app->wishlist;
         'options' => [
             'class' => 'alert-info',
         ],
-        'closeButton'=>false,
+        'closeButton' => false,
         'body' => Yii::t('wishlist/default', 'EMPTY_LIST'),
     ]);
     ?>

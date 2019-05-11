@@ -33,7 +33,7 @@ class WishlistWidget extends Widget
     public function init()
     {
         if (is_null($this->pk))
-            throw new InvalidArgumentException(Yii::t('WishlistWidget.default', 'ERROR_PK_ISNULL'));
+            throw new InvalidArgumentException(Yii::t('wishlist/default', 'ERROR_PK_ISNULL'));
 
         parent::init();
     }
