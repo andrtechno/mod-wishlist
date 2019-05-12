@@ -37,6 +37,7 @@ class DefaultController extends WebController
     public function actionIndex()
     {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
+        $this->view->title = $this->pageName;
         $this->breadcrumbs[] = [
             'label' => $this->pageName,
             'url' => ['/wishlist']
@@ -66,7 +67,7 @@ class DefaultController extends WebController
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
                 'count' => $this->model->count(),
-                'title'=>Yii::t('wishlist/default','ALREADY_EXIST')
+                'title' => Yii::t('wishlist/default', 'ALREADY_EXIST')
             ];
         }
     }
