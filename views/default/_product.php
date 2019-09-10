@@ -29,7 +29,7 @@ use yii\helpers\Html;
         }
         ?>
         <?= $data->priceRange() ?></span>
-            <sup><?= Yii::$app->currency->active->symbol ?></sup>
+            <sup><?= Yii::$app->currency->active['symbol'] ?></sup>
         </div>
 
         <?php
