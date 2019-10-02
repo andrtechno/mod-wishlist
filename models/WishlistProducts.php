@@ -2,21 +2,25 @@
 
 namespace panix\mod\wishlist\models;
 
-class WishlistProducts extends \yii\db\ActiveRecord {
+use yii\db\ActiveRecord;
 
+class WishlistProducts extends ActiveRecord
+{
 
 
     /**
      * @return string the associated database table name
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%wishlist_products}}';
     }
 
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return array(
             'id' => 'ID',
             'wishlist_id' => 'Wishlist',

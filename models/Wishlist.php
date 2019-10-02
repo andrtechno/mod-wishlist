@@ -4,8 +4,9 @@ namespace panix\mod\wishlist\models;
 
 use Yii;
 use panix\mod\wishlist\models\WishlistProducts;
+use panix\engine\db\ActiveRecord;
 
-class Wishlist extends \panix\engine\db\ActiveRecord {
+class Wishlist extends ActiveRecord {
 
 
     /**

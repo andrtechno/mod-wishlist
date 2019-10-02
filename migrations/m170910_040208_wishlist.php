@@ -1,45 +1,47 @@
 <?php
 
-use yii\db\Migration;
+namespace panix\mod\wishlist\migrations;
+
+use panix\engine\db\Migration;
+use panix\mod\wishlist\models\Wishlist;
+use panix\mod\wishlist\models\WishlistProducts;
 
 /**
  * Class m170910_040208_wishlist
  */
-class m170910_040208_wishlist extends Migration {
+class m170910_040208_wishlist extends Migration
+{
 
-    public function up() {
-        $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-        }
-
-        $this->createTable('{{%wishlist}}', [
+    public function up()
+    {
+        $this->createTable(Wishlist::tableName(), [
             'id' => $this->primaryKey(),
             'key' => $this->string(10)->defaultValue(''),
             'user_id' => $this->integer(),
-                ], $tableOptions);
+        ], $this->tableOptions);
 
 
-        $this->createTable('{{%wishlist_products}}', [
+        $this->createTable(WishlistProducts::tableName(), [
             'id' => $this->primaryKey(),
             'wishlist_id' => $this->integer(),
             'product_id' => $this->integer(),
             'user_id' => $this->integer(),
-                ], $tableOptions);
+        ], $this->tableOptions);
 
 
-        $this->createIndex('user_id', '{{%wishlist}}', 'user_id');
-        $this->createIndex('key', '{{%wishlist}}', 'key');
+        $this->createIndex('user_id', Wishlist::tableName(), 'user_id');
+        $this->createIndex('key', Wishlist::tableName(), 'key');
 
 
-        $this->createIndex('wishlist_id', '{{%wishlist_products}}', 'wishlist_id');
-        $this->createIndex('product_id', '{{%wishlist_products}}', 'product_id');
-        $this->createIndex('user_id', '{{%wishlist_products}}', 'user_id');
+        $this->createIndex('wishlist_id', WishlistProducts::tableName(), 'wishlist_id');
+        $this->createIndex('product_id', WishlistProducts::tableName(), 'product_id');
+        $this->createIndex('user_id', WishlistProducts::tableName(), 'user_id');
     }
 
-    public function down() {
-        $this->dropTable('{{%wishlist}}');
-        $this->dropTable('{{%wishlist_products}}');
+    public function down()
+    {
+        $this->dropTable(Wishlist::tableName());
+        $this->dropTable(WishlistProducts::tableName());
     }
 
 }
