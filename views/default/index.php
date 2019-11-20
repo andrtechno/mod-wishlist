@@ -4,7 +4,7 @@ use panix\engine\bootstrap\Alert;
 $component = Yii::$app->wishlist;
 ?>
 
-    <h1><?= $this->context->pageName; ?></h1>
+<h1><?= $this->context->pageName; ?></h1>
 
 
 <?php if ($component->products) { ?>
@@ -16,7 +16,7 @@ $component = Yii::$app->wishlist;
         <?php
         foreach ($component->products as $p) {
             echo $this->render('_product', [
-                'data' => $p,
+                'model' => $p,
                 'component' => $component
             ]);
         }
