@@ -8,10 +8,6 @@ $component = Yii::$app->wishlist;
 
 
 <?php if ($component->products) { ?>
-
-    <a class="btn btn-primary"
-       href="mailto:?body=<?= $component->getUrl() ?>&subject=<?= Yii::t('wishlist/default', 'SUBJECT_NAME') ?>"><?= Yii::t('app', 'SEND') ?></a>
-
     <div class="list-view _view_grid">
         <?php
         foreach ($component->products as $p) {
