@@ -13,7 +13,7 @@ $(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                $('#countWishlist').html(data.count);
+                $('#countWishList').html(data.count);
                 common.notify(data.message, 'success');
                 that.addClass('added');
                 //that.addClass('disabled');

@@ -4,7 +4,7 @@ namespace panix\mod\wishlist;
 
 use panix\engine\web\AssetBundle;
 
-class WishlistAsset extends AssetBundle
+class WishListAsset extends AssetBundle
 {
 
     public $sourcePath = __DIR__.'/assets';

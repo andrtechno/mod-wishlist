@@ -6,6 +6,7 @@ use Yii;
 use panix\engine\data\Widget;
 use panix\mod\wishlist\components\WishListComponent;
 use yii\base\InvalidArgumentException;
+
 /**
  * Widget add to wishlist module for shop.
  *
@@ -15,7 +16,7 @@ use yii\base\InvalidArgumentException;
  *
  * Example:
  * <code>
- * echo \panix\mod\wishlist\widgets\WishlistWidget::widget([
+ * echo \panix\mod\wishlist\widgets\WishListWidget::widget([
  *  'pk' => $model->primaryKey,
  *  'skin' => 'icon',
  *  'linkOptions' => ['class' => 'btn btn-compare']
@@ -23,7 +24,7 @@ use yii\base\InvalidArgumentException;
  * </code>
  *
  */
-class WishlistWidget extends Widget
+class WishListWidget extends Widget
 {
 
     public $pk;
@@ -43,9 +44,9 @@ class WishlistWidget extends Widget
 
         $wishListComponent = new WishListComponent();
         $this->isAdded = (in_array($this->pk, $wishListComponent->getIds())) ? true : false;
-
-        if($this->isAdded){
-            $this->linkOptions['title']=Yii::t('wishlist/default','ALREADY_EXIST');
+        $this->linkOptions['data-pjax'] = 0;
+        if ($this->isAdded) {
+            $this->linkOptions['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');
             $this->linkOptions['class'] .= ' added';
         }
 

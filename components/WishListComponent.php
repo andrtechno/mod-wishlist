@@ -4,7 +4,7 @@ namespace panix\mod\wishlist\components;
 
 use Yii;
 use panix\mod\shop\models\Product;
-use panix\mod\wishlist\models\Wishlist;
+use panix\mod\wishlist\models\WishList;
 use yii\base\Component;
 
 class WishListComponent extends Component {
@@ -20,7 +20,7 @@ class WishListComponent extends Component {
     private $_products;
 
     /**
-     * @var Wishlist
+     * @var WishList
      */
     private $_model;
 
@@ -120,19 +120,19 @@ class WishListComponent extends Component {
      * Очистить список
      */
     public function clear() {
-        $this->setIds(array());
+        $this->setIds([]);
     }
 
     /**
      * Get and/or create user wishlist
-     * @return Wishlist
+     * @return WishList
      */
     public function getModel() {
         if ($this->_model === null) {
-            $model = Wishlist::findOne(['user_id'=>$this->getUserId()]);
-           // $model = Wishlist::find(['user_id' => $this->getUserId()])->one();
+            $model = WishList::findOne(['user_id'=>$this->getUserId()]);
+           // $model = WishList::find(['user_id' => $this->getUserId()])->one();
             if ($model === null){
-                $model = new Wishlist;
+                $model = new WishList;
                 $model->creater($this->getUserId());
             }
             $this->_model = $model;
@@ -168,12 +168,12 @@ class WishListComponent extends Component {
 
     /**
      * @param $key
-     * @return CActiveRecord
-     * @throws CException
+     * @return null|WishList
+     * @throws \Exception
      */
     public function loadByKey($key) {
-       // $model = Wishlist::find(['key' => $key])->one();
-        $model = Wishlist::findOne(['key' => $key]);
+       // $model = WishList::find(['key' => $key])->one();
+        $model = WishList::findOne(['key' => $key]);
 
         if ($model === null)
             throw new \Exception();

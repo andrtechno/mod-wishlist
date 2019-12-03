@@ -20,7 +20,7 @@ class Module extends WebModule implements BootstrapInterface {
         );
 
         $app->setComponents([
-            'wishlist' => ['class' => 'panix\mod\wishlist\components\WishlistComponent'],
+            'wishlist' => ['class' => 'panix\mod\wishlist\components\WishListComponent'],
         ]);
     }
 }
