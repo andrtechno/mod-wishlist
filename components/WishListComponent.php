@@ -97,7 +97,7 @@ class WishListComponent extends Component {
         if ($model)
             return $model->getIds();
 
-        return array();
+        return [];
     }
 
     /**
