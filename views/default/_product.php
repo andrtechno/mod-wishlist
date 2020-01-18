@@ -44,14 +44,14 @@ use yii\helpers\Html;
                 if ($model->isAvailable) {
                     echo Html::a(Yii::t('cart/default', 'BUY'), 'javascript:cart.add("#form-add-cart-' . $model->id . '")', ['class' => 'btn btn-warning']);
                 } else {
-                    echo Html::a(Yii::t('app', 'NOT_AVAILABLE'), 'javascript:cart.notifier(' . $model->id . ');', ['class' => 'btn btn-link']);
+                    echo Html::a(Yii::t('app/default', 'NOT_AVAILABLE'), 'javascript:cart.notifier(' . $model->id . ');', ['class' => 'btn btn-link']);
                 }
                 ?>
             </div>
         </div>
         <?php
         if ($component->getUserId() === Yii::$app->user->id) {
-            echo Html::a(Yii::t('app', 'DELETE'), ['remove', 'id' => $model->id], [
+            echo Html::a(Yii::t('app/default', 'DELETE'), ['remove', 'id' => $model->id], [
                 'class' => 'btn btn-danger remove',
             ]);
         } else {
