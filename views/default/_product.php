@@ -23,7 +23,7 @@ use yii\helpers\Html;
     <span class="price">
         <?php
         if (Yii::$app->hasModule('discounts')) {
-            if ($model->appliedDiscount) {
+            if ($model->hasDiscount) {
                 echo '<span style="color:red; "><s>' . $model->toCurrentCurrency('originalPrice') . '</s></span>';
             }
         }
