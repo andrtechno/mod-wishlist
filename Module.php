@@ -3,7 +3,6 @@
 namespace panix\mod\wishlist;
 
 use panix\engine\WebModule;
-use panix\mod\wishlist\components\WishListComponent;
 use yii\base\BootstrapInterface;
 
 /**
@@ -14,8 +13,6 @@ use yii\base\BootstrapInterface;
  */
 class Module extends WebModule implements BootstrapInterface
 {
-
-    public $count = 0;
 
     public function bootstrap($app)
     {
@@ -32,10 +29,6 @@ class Module extends WebModule implements BootstrapInterface
         $app->setComponents([
             'wishlist' => ['class' => 'panix\mod\wishlist\components\WishListComponent'],
         ]);
-
-
-        $this->count = (new WishListComponent)->count();
-
-
     }
+
 }
