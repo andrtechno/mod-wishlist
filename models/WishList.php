@@ -5,6 +5,7 @@ namespace panix\mod\wishlist\models;
 use Yii;
 use panix\mod\wishlist\models\WishListProducts;
 use panix\engine\db\ActiveRecord;
+use yii\caching\DbDependency;
 
 class WishList extends ActiveRecord {
 
@@ -46,7 +47,7 @@ class WishList extends ActiveRecord {
     }
 
     public function afterDelete() {
-        $this->setIds(array());
+        $this->setIds([]);
         parent::afterDelete();
     }
 
@@ -54,9 +55,14 @@ class WishList extends ActiveRecord {
      * get products ids save in the current wishlist
      */
     public function getIds() {
-            $table = WishListProducts::tableName();
+        $table = WishListProducts::tableName();
+       // $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id={$this->id}"]);
+
+
+
                 return Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
                 ->bindValue(':id', $this->id)
+                //->cache(3600*24,$dependency)
                 ->queryColumn();
                         
         /*return Yii::$app->db->createCommand()
@@ -87,11 +93,11 @@ class WishList extends ActiveRecord {
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
-        return array(
+        return [
             'id' => 'ID',
             'key' => 'Key',
             'user_id' => 'User',
-        );
+        ];
     }
 
     /**
@@ -102,7 +108,15 @@ class WishList extends ActiveRecord {
         if ($user_id === null)
             $user_id = Yii::$app->user->id;
         $table = WishListProducts::tableName();
-        return Yii::$app->db->createCommand("SELECT COUNT(id) FROM {$table} WHERE user_id=:user_id")->bindValue(':user_id', $user_id)->queryScalar();
+
+
+        $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE user_id={$user_id}"]);
+
+        return Yii::$app->db
+            ->createCommand("SELECT COUNT(id) FROM {$table} WHERE user_id=:user_id")
+            ->cache(3600*24,$dependency)
+            ->bindValue(':user_id', $user_id)
+            ->queryScalar();
     }
 
 }

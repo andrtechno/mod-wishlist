@@ -6,6 +6,7 @@ namespace panix\mod\wishlist\controllers;
 use Yii;
 use panix\engine\controllers\WebController;
 use panix\mod\wishlist\components\WishListComponent;
+use yii\helpers\Url;
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -60,13 +61,14 @@ class DefaultController extends WebController
             Yii::$app->session->setFlash('success', $message);
             return $this->redirect(['index']);
         } else {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            Yii::$app->response->data = [
+            $data = [
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
                 'count' => $this->model->count(),
-                'title' => Yii::t('wishlist/default', 'ALREADY_EXIST')
+                'title' => Yii::t('wishlist/default', 'ALREADY_EXIST'),
+                'url' => Url::to(['/wishlist/default/remove', 'id' => $id])
             ];
+            return $this->asJson($data);
         }
     }
 
@@ -97,8 +99,19 @@ class DefaultController extends WebController
     {
 
         $this->model->remove($id);
-        if (!Yii::$app->request->isAjax)
+        $message = Yii::t('wishlist/default', 'DELETE_SUCCESS');
+        if (Yii::$app->request->isAjax) {
+            $data = [
+                'message' => $message,
+                'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
+                'count' => $this->model->count(),
+                //'title' => Yii::t('wishlist/default', 'ALREADY_EXIST'),
+                'url' => Url::to(['/wishlist/default/add', 'id' => $id])
+            ];
+            return $this->asJson($data);
+        } else {
             return $this->redirect(['index']);
+        }
     }
 
 }

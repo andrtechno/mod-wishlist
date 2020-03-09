@@ -1,6 +1,6 @@
 $(function () {
-    var xhr;
-    $(document).on('click', '.btn-wishlist:not(.added)', function (e) {
+    var xhr; //:not(.added)
+    $(document).on('click', '.btn-wishlist', function (e) {
         var that = $(this);
 
         if (xhr && xhr.readyState !== 4) {
@@ -13,11 +13,13 @@ $(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                $('#countWishList').html(data.count);
+                $('.countWishList').html(data.count);
                 common.notify(data.message, 'success');
-                that.addClass('added');
-                //that.addClass('disabled');
-                that.attr('title',data.title);
+                that.toggleClass('added');
+                if (data.title)
+                    that.attr('title', data.title);
+                if (data.url)
+                    that.attr('href', data.url);
             }
         });
 

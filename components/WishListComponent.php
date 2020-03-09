@@ -12,7 +12,7 @@ class WishListComponent extends Component {
     /**
      * Максимальное количество товаров могут быть добавлены к списку желаний
      */
-    const MAX_PRODUCTS = 50;
+    const MAX_PRODUCTS = 999;
 
     /**
      * @var array if products id
@@ -28,7 +28,7 @@ class WishListComponent extends Component {
      * @var null
      */
     private $_user_id;
-
+    private $cacheDuration = 3600*24;
     /**
      * @param mixed $user_id
      */
@@ -122,21 +122,22 @@ class WishListComponent extends Component {
     public function clear() {
         $this->setIds([]);
     }
-
     /**
      * Get and/or create user wishlist
      * @return WishList
      */
     public function getModel() {
+
         if ($this->_model === null) {
-            $model = WishList::findOne(['user_id'=>$this->getUserId()]);
-           // $model = WishList::find(['user_id' => $this->getUserId()])->one();
+            // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
+            $model = WishList::find()->where(['user_id' => $this->getUserId()])->cache($this->cacheDuration)->one();
             if ($model === null){
                 $model = new WishList;
                 $model->creater($this->getUserId());
             }
             $this->_model = $model;
         }
+
         return $this->_model;
     }
 
@@ -146,7 +147,9 @@ class WishListComponent extends Component {
     public function getProducts() {
 
         if ($this->_products === null){
-            $this->_products = Product::findAll(['id'=>array_values($this->getIds())]);
+            /** @var Product $productModel */
+            $productModel = Yii::$app->getModule('shop')->model('Product');
+            $this->_products = $productModel::findAll(['id'=>array_values($this->getIds())]);
         }
         return $this->_products;
     }

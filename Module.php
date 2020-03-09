@@ -3,9 +3,19 @@
 namespace panix\mod\wishlist;
 
 use panix\engine\WebModule;
+use panix\mod\wishlist\components\WishListComponent;
 use yii\base\BootstrapInterface;
 
-class Module extends WebModule implements BootstrapInterface {
+/**
+ * Class Module
+ *
+ * @property int $count
+ * @package panix\mod\wishlist
+ */
+class Module extends WebModule implements BootstrapInterface
+{
+
+    public $count = 0;
 
     public function bootstrap($app)
     {
@@ -14,7 +24,7 @@ class Module extends WebModule implements BootstrapInterface {
                 'wishlist' => 'wishlist/default/index',
                 'wishlist/add/<id:\d+>' => 'wishlist/default/add',
                 'wishlist/remove/<id:\d+>' => 'wishlist/default/remove',
-                'wishlist/view/<key>' => 'wishlist/default/view',
+                'wishlist/view/<key:[0-9a-zA-Z]+>' => 'wishlist/default/view',
             ],
             false
         );
@@ -22,5 +32,10 @@ class Module extends WebModule implements BootstrapInterface {
         $app->setComponents([
             'wishlist' => ['class' => 'panix\mod\wishlist\components\WishListComponent'],
         ]);
+
+
+        $this->count = (new WishListComponent)->count();
+
+
     }
 }
