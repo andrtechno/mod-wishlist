@@ -92,7 +92,7 @@ class WishListComponent extends Component {
      * @return array of product id added to wishlist
      */
     public function getIds() {
-        $model = $this->getModel();
+        $model = Yii::$app->getModule('wishlist')->getModel();
 
         if ($model)
             return $model->getIds();
@@ -130,7 +130,10 @@ class WishListComponent extends Component {
 
         if ($this->_model === null) {
             // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
-            $model = WishList::find()->where(['user_id' => $this->getUserId()])->cache($this->cacheDuration)->one();
+            $model = WishList::find()
+                ->where(['user_id' => $this->getUserId()])
+                ->cache($this->cacheDuration)
+                ->one();
             if ($model === null){
                 $model = new WishList;
                 $model->creater($this->getUserId());
@@ -166,7 +169,7 @@ class WishListComponent extends Component {
      * @return string
      */
     public function getUrl() {
-        return Yii::$app->urlManager->createAbsoluteUrl(['/wishlist/default/view', 'key' => $this->getModel()->key]);
+        return Yii::$app->urlManager->createAbsoluteUrl(['/wishlist/default/view', 'key' => Yii::$app->getModule('wishlist')->getModel()->key]);
     }
 
     /**

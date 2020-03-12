@@ -2,6 +2,7 @@
 
 namespace panix\mod\wishlist\widgets;
 
+use panix\mod\wishlist\models\WishList;
 use Yii;
 use panix\engine\data\Widget;
 use panix\mod\wishlist\components\WishListComponent;
@@ -42,8 +43,14 @@ class WishListWidget extends Widget
     public function run()
     {
 
-        $wishListComponent = new WishListComponent();
-        $this->isAdded = (in_array($this->pk, $wishListComponent->getIds())) ? true : false;
+
+       // $wishListComponent = new WishListComponent();
+
+       // print_r(Yii::$app->getModule('wishlist')->getModel()->getIds());die;
+
+        $ids = Yii::$app->getModule('wishlist')->getIds();
+
+       $this->isAdded = (in_array($this->pk, $ids)) ? true : false;
         $this->linkOptions['data-pjax'] = 0;
         if ($this->isAdded) {
             $this->linkOptions['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');

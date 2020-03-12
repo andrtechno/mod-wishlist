@@ -7,33 +7,39 @@ use panix\mod\wishlist\models\WishListProducts;
 use panix\engine\db\ActiveRecord;
 use yii\caching\DbDependency;
 
-class WishList extends ActiveRecord {
+class WishList extends ActiveRecord
+{
 
 
     /**
      * @return string the associated database table name
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%wishlist}}';
     }
 
     /**
      * @param $user_id
      */
-    public function creater($user_id) {
+    public function creater($user_id)
+    {
         $model = new WishList;
         $model->user_id = $user_id;
         $model->key = $this->createSecretKey();
         $model->save(false);
         return;
     }
-
+    public function getProducts()
+    {
+        return $this->hasMany(WishListProducts::class, ['wishlist_id' => 'id']);
+    }
     /**
      * @param array $ids
      */
-    public function setIds(array $ids) {
+    public function setIds(array $ids)
+    {
         WishListProducts::deleteAll(['wishlist_id' => $this->id]);
-
         if (!empty($ids)) {
 
             foreach ($ids as $id) {
@@ -46,7 +52,8 @@ class WishList extends ActiveRecord {
         }
     }
 
-    public function afterDelete() {
+    public function afterDelete()
+    {
         $this->setIds([]);
         parent::afterDelete();
     }
@@ -54,22 +61,18 @@ class WishList extends ActiveRecord {
     /**
      * get products ids save in the current wishlist
      */
-    public function getIds() {
+    public function getIds()
+    {
         $table = WishListProducts::tableName();
-       // $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id={$this->id}"]);
+        $table2 = WishList::tableName();
+        //$dependency = new DbDependency(['sql' => "SELECT MAX(updated_at) FROM {$table2}"]);
 
 
+        return Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
+            ->bindValue(':id', $this->id)
+            //->cache(3600 * 24, $dependency)
+            ->queryColumn();
 
-                return Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
-                ->bindValue(':id', $this->id)
-                //->cache(3600*24,$dependency)
-                ->queryColumn();
-                        
-        /*return Yii::$app->db->createCommand()
-                        ->select('product_id')
-                        ->from(WishListProducts::tableName())
-                        ->where('wishlist_id=:id', array(':id' => $this->id))
-                        ->queryColumn();*/
     }
 
     /**
@@ -77,7 +80,8 @@ class WishList extends ActiveRecord {
      * @param int $size
      * @return string
      */
-    public function createSecretKey($size = 10) {
+    public function createSecretKey($size = 10)
+    {
         $result = '';
         $chars = '1234567890qweasdzxcrtyfghvbnuioplkjnm';
         while (mb_strlen($result, 'utf8') < $size)
@@ -92,7 +96,8 @@ class WishList extends ActiveRecord {
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'key' => 'Key',
@@ -104,7 +109,8 @@ class WishList extends ActiveRecord {
      * @param null $user_id if null will count for current user
      * @return mixed
      */
-    public static function countByUser($user_id = null) {
+    public static function countByUser($user_id = null)
+    {
         if ($user_id === null)
             $user_id = Yii::$app->user->id;
         $table = WishListProducts::tableName();
@@ -114,7 +120,7 @@ class WishList extends ActiveRecord {
 
         return Yii::$app->db
             ->createCommand("SELECT COUNT(id) FROM {$table} WHERE user_id=:user_id")
-            ->cache(3600*24,$dependency)
+            ->cache(3600 * 24, $dependency)
             ->bindValue(':user_id', $user_id)
             ->queryScalar();
     }

@@ -2,7 +2,9 @@
 
 namespace panix\mod\wishlist\models;
 
-use yii\db\ActiveRecord;
+use panix\engine\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class WishListProducts
@@ -29,12 +31,23 @@ class WishListProducts extends ActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => 'ID',
             'wishlist_id' => 'WishList',
             'product_id' => 'Product',
             'user_id' => 'User',
-        );
+        ];
     }
 
+    public function behaviors()
+    {
+        $b = [];
+        $b['timestamp'] = [
+            'class' => TimestampBehavior::class,
+            'attributes' => [
+                self::EVENT_BEFORE_INSERT => ['created_at'],
+            ]
+        ];
+        return ArrayHelper::merge(parent::behaviors(),$b);
+    }
 }
