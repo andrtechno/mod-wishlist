@@ -22,67 +22,69 @@ class Module extends WebModule implements BootstrapInterface
     public $count = 0;
     private $_model;
     private $_ids;
-    private $cacheDuration = 3600*24;
+    private $cacheDuration = 3600 * 24;
+
     public function bootstrap($app)
     {
-        $app->urlManager->addRules(
-            [
-                'wishlist' => 'wishlist/default/index',
-                'wishlist/add/<id:\d+>' => 'wishlist/default/add',
-                'wishlist/remove/<id:\d+>' => 'wishlist/default/remove',
-                'wishlist/view/<key:[0-9a-zA-Z]+>' => 'wishlist/default/view',
-            ],
-            false
-        );
-        $this->_user_id = Yii::$app->user->id;
-        $app->setComponents([
-            'wishlist' => ['class' => 'panix\mod\wishlist\components\WishListComponent'],
-        ]);
+        if (Yii::$app->id != 'console') {
+            $app->urlManager->addRules(
+                [
+                    'wishlist' => 'wishlist/default/index',
+                    'wishlist/add/<id:\d+>' => 'wishlist/default/add',
+                    'wishlist/remove/<id:\d+>' => 'wishlist/default/remove',
+                    'wishlist/view/<key:[0-9a-zA-Z]+>' => 'wishlist/default/view',
+                ],
+                false
+            );
+            $this->_user_id = Yii::$app->user->id;
+
+            $app->setComponents([
+                'wishlist' => ['class' => 'panix\mod\wishlist\components\WishListComponent'],
+            ]);
 
 
-
-        if ($this->_model === null) {
-            // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
-            $model = WishList::find()
-                ->where(['user_id' => $this->getUserId()])
-                ->cache($this->cacheDuration)
-                ->one();
-            if ($model === null){
-                $model = new WishList;
-                $model->creater($this->getUserId());
+            if ($this->_model === null) {
+                // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
+                $model = WishList::find()
+                    ->where(['user_id' => $this->getUserId()])
+                    ->cache($this->cacheDuration)
+                    ->one();
+                if ($model === null) {
+                    $model = new WishList;
+                    $model->creater($this->getUserId());
+                }
+                $this->_model = $model;
             }
-            $this->_model = $model;
+
+
+            $table = WishListProducts::tableName();
+            $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id=" . $this->getModel()->id]);
+
+
+            $this->_ids = Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
+                ->bindValue(':id', $this->getModel()->id)
+                ->cache($this->cacheDuration, $dependency)
+                ->queryColumn();
+
+
+            /*$this->count = (new WishListComponent)->count();*/
         }
-
-
-
-
-        $table = WishListProducts::tableName();
-        $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id=".$this->getModel()->id]);
-
-
-        $this->_ids= Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
-            ->bindValue(':id', $this->getModel()->id)
-            ->cache($this->cacheDuration, $dependency)
-            ->queryColumn();
-
-
-        /*$this->count = (new WishListComponent)->count();*/
-
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->_user_id;
     }
-    public function getModel() {
+
+    public function getModel()
+    {
         return $this->_model;
     }
+
     public function getIds()
     {
-
         return $this->_ids;
 
     }
-
 
 }
