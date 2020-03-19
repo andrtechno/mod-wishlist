@@ -20,7 +20,7 @@ use yii\base\InvalidArgumentException;
  * echo \panix\mod\wishlist\widgets\WishListWidget::widget([
  *  'pk' => $model->primaryKey,
  *  'skin' => 'icon',
- *  'linkOptions' => ['class' => 'btn btn-compare']
+ *  'linkOptions' => ['class' => 'btn btn-wishlist']
  * ]);
  * </code>
  *
@@ -43,14 +43,9 @@ class WishListWidget extends Widget
     public function run()
     {
 
-
-       // $wishListComponent = new WishListComponent();
-
-       // print_r(Yii::$app->getModule('wishlist')->getModel()->getIds());die;
-
         $ids = Yii::$app->getModule('wishlist')->getIds();
 
-       $this->isAdded = (in_array($this->pk, $ids)) ? true : false;
+        $this->isAdded = (in_array($this->pk, $ids)) ? true : false;
         $this->linkOptions['data-pjax'] = 0;
         if ($this->isAdded) {
             $this->linkOptions['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');

@@ -83,7 +83,15 @@ class Module extends WebModule implements BootstrapInterface
 
     public function getIds()
     {
-        return $this->_ids;
+        if (Yii::$app->user->isGuest) {
+            $session = Yii::$app->session;
+            if (isset($session['wishlist_products'])) {
+                return array_unique($session['wishlist_products']);
+            }
+        } else {
+            return $this->_ids;
+        }
+        return [];
 
     }
 

@@ -92,11 +92,20 @@ class WishListComponent extends Component {
      * @return array of product id added to wishlist
      */
     public function getIds() {
-        $model = Yii::$app->getModule('wishlist')->getModel();
 
-        if ($model)
-            return $model->getIds();
 
+        if (Yii::$app->user->isGuest) {
+            $session = Yii::$app->session;
+            if (isset($session['wishlist_products'])) {
+                return array_unique($session['wishlist_products']);
+            }
+        } else {
+            $model = Yii::$app->getModule('wishlist')->getModel();
+
+            if ($model)
+                return $model->getIds();
+
+        }
         return [];
     }
 
@@ -113,7 +122,24 @@ class WishListComponent extends Component {
      */
     public function setIds(array $ids) {
         $ids = array_unique($ids);
-        $this->getModel()->setIds($ids);
+        if (Yii::$app->user->isGuest) {
+            $session = Yii::$app->session;
+            $result = [];
+            if (!isset($session['wishlist_products'])) {
+                $result = $session['wishlist_products'];
+            }
+
+            if (!empty($ids)) {
+                foreach ($ids as $id) {
+                    $result[] = $id;
+                }
+            }
+
+            $session['wishlist_products'] = $result;
+        } else {
+            $this->getModel()->setIds($ids);
+        }
+
     }
 
     /**

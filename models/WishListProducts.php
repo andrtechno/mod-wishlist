@@ -42,12 +42,12 @@ class WishListProducts extends ActiveRecord
     public function behaviors()
     {
         $b = [];
-        $b['timestamp'] = [
+        /*$b['timestamp'] = [
             'class' => TimestampBehavior::class,
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => ['created_at'],
             ]
-        ];
+        ];*/
         return ArrayHelper::merge(parent::behaviors(),$b);
     }
 }

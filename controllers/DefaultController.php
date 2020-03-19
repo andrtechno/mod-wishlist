@@ -20,13 +20,13 @@ class DefaultController extends WebController
 
     public function beforeAction($action)
     {
-        if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
+        /*if (Yii::$app->user->isGuest && $this->action->id !== 'view') {
             Yii::$app->user->returnUrl = Yii::$app->request->getUrl();
             if (Yii::$app->request->isAjax)
                 throw new HttpException(302);
             else
                 return $this->redirect(Yii::$app->user->loginUrl);
-        }
+        }*/
 
         $this->model = new WishListComponent();
         return parent::beforeAction($action);
@@ -57,10 +57,7 @@ class DefaultController extends WebController
     {
         $this->model->add($id);
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
-        if (!Yii::$app->request->isAjax) {
-            Yii::$app->session->setFlash('success', $message);
-            return $this->redirect(['index']);
-        } else {
+        if (Yii::$app->request->isAjax) {
             $data = [
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
@@ -69,6 +66,10 @@ class DefaultController extends WebController
                 'url' => Url::to(['/wishlist/default/remove', 'id' => $id])
             ];
             return $this->asJson($data);
+
+        } else {
+            Yii::$app->session->setFlash('success', $message);
+            return $this->redirect(['index']);
         }
     }
 
