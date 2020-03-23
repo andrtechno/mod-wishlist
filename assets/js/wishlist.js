@@ -1,6 +1,7 @@
 $(function () {
     var xhr; //:not(.added)
-    $(document).on('click', '.btn-wishlist', function (e) {
+    $(document).on('click touchstart', '.btn-wishlist', function (e) {
+        e.preventDefault();
         var that = $(this);
 
         if (xhr && xhr.readyState !== 4) {
@@ -22,10 +23,5 @@ $(function () {
                     that.attr('href', data.url);
             }
         });
-
-    });
-    $(document).on('click', '.btn-wishlist', function (e) {
-        e.preventDefault();
-        return false;
     });
 });
