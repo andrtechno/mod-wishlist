@@ -14,13 +14,17 @@ $(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                $('.countWishList').html(data.count);
-                common.notify(data.message, 'success');
-                that.toggleClass('added');
-                if (data.title)
-                    that.attr('title', data.title);
-                if (data.url)
-                    that.attr('href', data.url);
+                if (data.success) {
+                    $('.countWishList').html(data.count);
+                    common.notify(data.message, 'success');
+                    that.toggleClass('added');
+                    if (data.title)
+                        that.attr('title', data.title);
+                    if (data.url)
+                        that.attr('href', data.url);
+                } else {
+                    common.notify(data.message, 'error');
+                }
             }
         });
     });

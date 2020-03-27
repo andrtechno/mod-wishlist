@@ -7,6 +7,7 @@ use Yii;
 use panix\engine\controllers\WebController;
 use panix\mod\wishlist\components\WishListComponent;
 use yii\helpers\Url;
+use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -51,26 +52,27 @@ class DefaultController extends WebController
      * Add product to wish list
      *
      * @param $id \panix\mod\shop\models\Product id
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionAdd($id)
     {
-        $this->model->add($id);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data['success'] = false;
+        $data['message'] = 'Error 403';
         $message = Yii::t('wishlist/default', 'SUCCESS_ADD');
-        if (Yii::$app->request->isAjax) {
-            $data = [
-                'message' => $message,
-                'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
-                'count' => $this->model->count(),
-                'title' => Yii::t('wishlist/default', 'ALREADY_EXIST'),
-                'url' => Url::to(['/wishlist/default/remove', 'id' => $id])
-            ];
-            return $this->asJson($data);
+        if (Yii::$app->request->isAjax || Yii::$app->request->isPjax) {
+            if ($this->model->add($id)) {
+                $data['success'] = true;
+                $data['message'] = $message;
+                $data['btn_message'] = Yii::t('wishlist/default', 'BTN_WISHLIST');
+                $data['count'] = $this->model->count();
+                $data['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');
+                $data['url'] = Url::to(['/wishlist/default/remove', 'id' => $id]);
 
-        } else {
-            Yii::$app->session->setFlash('success', $message);
-            return $this->redirect(['index']);
+            }
+
         }
+        return $this->asJson($data);
     }
 
     /**
@@ -94,14 +96,13 @@ class DefaultController extends WebController
      * Remove product from list
      *
      * @param int $id \panix\mod\shop\models\Product id
-     * @return \yii\web\Response
+     * @return ForbiddenHttpException|Response
      */
     public function actionRemove($id)
     {
-
-        $this->model->remove($id);
         $message = Yii::t('wishlist/default', 'DELETE_SUCCESS');
-        if (Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax || Yii::$app->request->isPjax) {
+            $this->model->remove($id);
             $data = [
                 'message' => $message,
                 'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
@@ -111,7 +112,8 @@ class DefaultController extends WebController
             ];
             return $this->asJson($data);
         } else {
-            return $this->redirect(['index']);
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return new ForbiddenHttpException();
         }
     }
 
