@@ -47,24 +47,26 @@ class Module extends WebModule implements BootstrapInterface
                 // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
                 $model = WishList::find()
                     ->where(['user_id' => $this->getUserId()])
-                    ->cache($this->cacheDuration)
+                    //->cache($this->cacheDuration)
                     ->one();
                 if ($model === null) {
                     $model = new WishList;
                     $model->creater($this->getUserId());
                 }
                 $this->_model = $model;
+
+
+                $table = WishListProducts::tableName();
+                $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id=" . $this->getModel()->id]);
+
+
+                $this->_ids = Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
+                    ->bindValue(':id', $this->getModel()->id)
+                    //->cache($this->cacheDuration, $dependency)
+                    ->queryColumn();
             }
 
 
-            $table = WishListProducts::tableName();
-            $dependency = new DbDependency(['sql' => "SELECT COUNT(*) FROM {$table} WHERE wishlist_id=" . $this->getModel()->id]);
-
-
-            $this->_ids = Yii::$app->db->createCommand("SELECT product_id FROM {$table} WHERE wishlist_id=:id")
-                ->bindValue(':id', $this->getModel()->id)
-                ->cache($this->cacheDuration, $dependency)
-                ->queryColumn();
 
 
             /*$this->count = (new WishListComponent)->count();*/
