@@ -101,7 +101,7 @@ class DefaultController extends WebController
     public function actionRemove($id)
     {
         $message = Yii::t('wishlist/default', 'DELETE_SUCCESS');
-        if (Yii::$app->request->isAjax || Yii::$app->request->isPjax) {
+        if ((Yii::$app->request->isAjax || Yii::$app->request->isPjax) && $this->model) {
             $this->model->remove($id);
             $data = [
                 'message' => $message,
