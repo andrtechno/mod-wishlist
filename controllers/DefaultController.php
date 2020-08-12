@@ -103,13 +103,11 @@ class DefaultController extends WebController
         $message = Yii::t('wishlist/default', 'DELETE_SUCCESS');
         if ((Yii::$app->request->isAjax || Yii::$app->request->isPjax) && $this->model) {
             $this->model->remove($id);
-            $data = [
-                'message' => $message,
-                'btn_message' => Yii::t('wishlist/default', 'BTN_WISHLIST'),
-                'count' => $this->model->count(),
-                //'title' => Yii::t('wishlist/default', 'ALREADY_EXIST'),
-                'url' => Url::to(['/wishlist/default/add', 'id' => $id])
-            ];
+            $data['success'] = true;
+            $data['message'] = $message;
+            $data['btn_message'] = Yii::t('wishlist/default', 'BTN_WISHLIST');
+            $data['count'] = $this->model->count();
+            $data['url'] = Url::to(['/wishlist/default/add', 'id' => $id]);
             return $this->asJson($data);
         } else {
             Yii::$app->response->format = Response::FORMAT_JSON;
