@@ -22,6 +22,13 @@ $(function () {
                         that.attr('title', data.title);
                     if (data.url)
                         that.attr('href', data.url);
+                    if(that.data('text') == true){
+                        if(that.hasClass('added')){
+                            that.html(wishlist_remove_text);
+                        }else{
+                            that.html(wishlist_add_text);
+                        }
+                    }
                 } else {
                     common.notify(data.message, 'error');
                 }
