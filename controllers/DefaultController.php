@@ -38,11 +38,11 @@ class DefaultController extends WebController
      */
     public function actionIndex()
     {
-        $this->pageName = Yii::t('wishlist/default', 'MY_WISHLIST');
+        $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
         $this->view->title = $this->pageName;
         $this->view->params['breadcrumbs'][] = [
             'label' => $this->pageName,
-            'url' => ['/wishlist']
+            'url' => ['index']
         ];
         // $this->model = new WishListComponent();
         return $this->render('index');
@@ -68,7 +68,8 @@ class DefaultController extends WebController
                 $data['count'] = $this->model->count();
                 $data['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');
                 $data['url'] = Url::to(['/wishlist/default/remove', 'id' => $id]);
-
+                $data['id'] = $id;
+                $data['action'] = 'add';
             }
 
         }
@@ -108,6 +109,8 @@ class DefaultController extends WebController
             $data['btn_message'] = Yii::t('wishlist/default', 'BTN_WISHLIST');
             $data['count'] = $this->model->count();
             $data['url'] = Url::to(['/wishlist/default/add', 'id' => $id]);
+            $data['id'] = $id;
+            $data['action'] = 'remove';
             return $this->asJson($data);
         } else {
             Yii::$app->response->format = Response::FORMAT_JSON;

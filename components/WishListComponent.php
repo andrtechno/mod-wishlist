@@ -158,7 +158,7 @@ class WishListComponent extends Component {
             // $model = WishList::findOne(['user_id'=>$this->getUserId()]);
             $model = WishList::find()
                 ->where(['user_id' => $this->getUserId()])
-                ->cache($this->cacheDuration)
+                //->cache($this->cacheDuration)
                 ->one();
             if ($model === null){
                 $model = new WishList;

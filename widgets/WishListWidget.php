@@ -71,7 +71,7 @@ class WishListWidget extends Widget
             $this->linkOptions['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');
             $this->linkOptions['class'] .= ' added';
         }
-
+        $this->linkOptions['data-id'] = $this->model->getPrimaryKey();
         if(!empty($this->removeText) && !empty($this->addText)){
             $this->linkOptions['data-text'] = 'true';
         }
