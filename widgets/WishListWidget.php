@@ -54,17 +54,19 @@ class WishListWidget extends Widget
     public function run()
     {
 
-        $this->view->registerJs("
+        /*$this->view->registerJs("
         var wishlist_add_text = '{$this->addText}';
         var wishlist_remove_text = '{$this->removeText}';
-        ",View::POS_HEAD,'wishlist_text');
+        ", View::POS_END, 'wishlist_js2');*/
+
+
         $asset = WishListAsset::register($this->view);
         $ids = Yii::$app->getModule('wishlist')->getIds();
 
         $this->isAdded = (in_array($this->model->getPrimaryKey(), $ids)) ? true : false;
         $this->linkOptions['data-pjax'] = 0;
 
-        $this->linkOptions['class'] .= ' wishlist-'.basename(get_class($this->model)).'-'.$this->model->getPrimaryKey();
+        $this->linkOptions['class'] .= ' wishlist-' . basename(get_class($this->model)) . '-' . $this->model->getPrimaryKey();
 
 
         if ($this->isAdded) {
@@ -72,12 +74,15 @@ class WishListWidget extends Widget
             $this->linkOptions['class'] .= ' added';
         }
         $this->linkOptions['data-id'] = $this->model->getPrimaryKey();
-        if(!empty($this->removeText) && !empty($this->addText)){
-            $this->linkOptions['data-text'] = 'true';
-        }
+        //if (!empty($this->removeText) && !empty($this->addText)) {
+        //    $this->linkOptions['data-text'] = ($this->isAdded) ? $this->removeText : $this->addText;
+       // }
 
+        $this->linkOptions['data-text-remove'] = $this->removeText;
+        $this->linkOptions['data-text-add'] = $this->addText;
         return Html::a(($this->isAdded) ? $this->removeText : $this->addText, ['/wishlist/default/' . (($this->isAdded) ? 'remove' : 'add'), 'id' => $this->model->getPrimaryKey()], $this->linkOptions);
 
     }
+
 
 }

@@ -1,6 +1,6 @@
 $(function () {
     var xhr; //:not(.added)
-    $(document).on('click touchstart', '.btn-wishlist, .wishlist-remove', function (e) {
+    $(document).on('click', '.btn-wishlist, .wishlist-remove', function (e) { // touchstart
         e.preventDefault();
         var that = $(this);
         var id = $(this).data('id');
@@ -18,28 +18,19 @@ $(function () {
                 if (data.success) {
                     $('.countWishList').html(data.count);
                     common.notify(data.message, 'success');
-
-                    if(data.action == 'remove'){
-                        $('#wishlist-item-'+data.id).remove();
+                    if (data.action === 'remove') {
+                        $('#wishlist-item-' + data.id).remove();
+                          that.html(that.data('text-add'));
+                    }else{
+                        that.html(that.data('text-remove'));
                     }
-                    //if(that.hasClass('btn-wishlist')){
-                        that.toggleClass('added');
-                        if (data.title)
-                            that.attr('title', data.title);
-                        if (data.url)
-                            that.attr('href', data.url);
-                        if(that.data('text') == true){
-                            if(that.hasClass('added')){
-                                that.html(wishlist_remove_text);
-                            }else{
-                                that.html(wishlist_add_text);
-                            }
-                        }
-                   // }else {
-                   //
 
+                    that.toggleClass('added');
+                    if (data.title)
+                        that.attr('title', data.title);
+                    if (data.url)
+                        that.attr('href', data.url);
 
-                   // }
                 } else {
                     common.notify(data.message, 'error');
                 }
