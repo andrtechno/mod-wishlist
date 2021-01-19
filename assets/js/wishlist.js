@@ -1,16 +1,16 @@
 $(function () {
-    var xhr; //:not(.added)
+    var xhr_wish; //:not(.added)
     $(document).on('click', '.btn-wishlist, .wishlist-remove', function (e) { // touchstart
         e.preventDefault();
         var that = $(this);
         var id = $(this).data('id');
 
-        if (xhr && xhr.readyState !== 4) {
-            xhr.onreadystatechange = null;
+        if (xhr_wish && xhr_wish.readyState !== 4) {
+            xhr_wish.onreadystatechange = null;
             //xhr.abort();
         }
 
-        xhr = $.ajax({
+        xhr_wish = $.ajax({
             url: that.attr('href'),
             type: 'GET',
             dataType: 'json',
