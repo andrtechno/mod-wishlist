@@ -3,7 +3,7 @@
     "description": "Module wishlist",
     "keywords": ["pixelion-cms", "module", "wishlist"],
     "homepage": "https://github.com/andrtechno/mod-wishlist",
-    "type": "yii2-extension",
+    "type": "pixelion-module",
     "license": "MIT",
     "authors": [
         {
