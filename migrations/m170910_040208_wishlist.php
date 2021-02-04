@@ -1,8 +1,5 @@
 <?php
 
-namespace panix\mod\wishlist\migrations;
-
-use Yii;
 use panix\engine\db\Migration;
 use panix\mod\wishlist\models\WishList;
 use panix\mod\wishlist\models\WishListProducts;
