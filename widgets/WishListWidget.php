@@ -60,15 +60,14 @@ class WishListWidget extends Widget
         ", View::POS_END, 'wishlist_js2');*/
 
 
+        $refrect = new \ReflectionClass($this->model);
+
         $asset = WishListAsset::register($this->view);
         $ids = Yii::$app->getModule('wishlist')->getIds();
 
         $this->isAdded = (in_array($this->model->getPrimaryKey(), $ids)) ? true : false;
         $this->linkOptions['data-pjax'] = 0;
-
-        $this->linkOptions['class'] .= ' wishlist-' . basename(get_class($this->model)) . '-' . $this->model->getPrimaryKey();
-
-
+        $this->linkOptions['class'] .= ' wishlist-' . mb_strtolower($refrect->getShortName()) . '-' . $this->model->getPrimaryKey();
         if ($this->isAdded) {
             $this->linkOptions['title'] = Yii::t('wishlist/default', 'ALREADY_EXIST');
             $this->linkOptions['class'] .= ' added';
