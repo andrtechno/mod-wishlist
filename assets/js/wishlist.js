@@ -11,7 +11,7 @@ $(function () {
         }
 
         xhr_wish = $.ajax({
-            url: that.attr('href'),
+            url: that.data('url'),
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -29,7 +29,7 @@ $(function () {
                     if (data.title)
                         that.attr('title', data.title);
                     if (data.url)
-                        that.attr('href', data.url);
+                        that.data('url', data.url);
 
                 } else {
                     common.notify(data.message, 'error');

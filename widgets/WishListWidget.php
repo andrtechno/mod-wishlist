@@ -2,6 +2,7 @@
 
 namespace panix\mod\wishlist\widgets;
 
+use http\Url;
 use panix\mod\wishlist\models\WishList;
 use panix\mod\wishlist\WishListAsset;
 use Yii;
@@ -79,7 +80,8 @@ class WishListWidget extends Widget
 
         $this->linkOptions['data-text-remove'] = $this->removeText;
         $this->linkOptions['data-text-add'] = $this->addText;
-        return Html::a(($this->isAdded) ? $this->removeText : $this->addText, ['/wishlist/default/' . (($this->isAdded) ? 'remove' : 'add'), 'id' => $this->model->getPrimaryKey()], $this->linkOptions);
+        $this->linkOptions['data-url']= \yii\helpers\Url::to(['/wishlist/default/' . (($this->isAdded) ? 'remove' : 'add'), 'id' => $this->model->getPrimaryKey()]);
+        return Html::button(($this->isAdded) ? $this->removeText : $this->addText, $this->linkOptions);
 
     }
 
