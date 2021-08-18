@@ -9,9 +9,14 @@ $(function () {
             xhr_wish.onreadystatechange = null;
             //xhr.abort();
         }
-
+        var url;
+        if (that.data('url')) {
+            url = that.data('url');
+        } else if (that.attr('href')) {
+            url = that.attr('href');
+        }
         xhr_wish = $.ajax({
-            url: that.data('url'),
+            url: url,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
