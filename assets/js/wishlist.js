@@ -35,7 +35,7 @@ $(function () {
                         that.attr('title', data.title);
                     if (data.url)
                         that.data('url', data.url);
-
+                    $(document).trigger( "wishlist:success", data);
                 } else {
                     common.notify(data.message, 'error');
                 }
