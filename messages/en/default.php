@@ -11,4 +11,6 @@ return [
     'SUCCESS_ADD' => 'The item was successfully added to the wishlist.',
     'DELETE_SUCCESS' => 'The item was successfully removed from the wishlist.',
     'ALREADY_EXIST' => 'The item is already on the wishlist',
+    'ADD' => 'Add to wishlist',
+    'REMOVE' => 'Remove from wishlist',
 ];
