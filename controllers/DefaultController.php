@@ -40,10 +40,7 @@ class DefaultController extends WebController
     {
         $this->pageName = Yii::t('wishlist/default', 'MODULE_NAME');
         $this->view->title = $this->pageName;
-        $this->view->params['breadcrumbs'][] = [
-            'label' => $this->pageName,
-            'url' => ['index']
-        ];
+        $this->view->params['breadcrumbs'][] = $this->pageName;
         // $this->model = new WishListComponent();
         return $this->render('index');
     }
