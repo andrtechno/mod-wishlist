@@ -2,15 +2,14 @@
 
 namespace panix\mod\wishlist\widgets;
 
-use http\Url;
-use panix\mod\wishlist\models\WishList;
-use panix\mod\wishlist\WishListAsset;
 use Yii;
+use yii\web\View;
+use yii\base\InvalidArgumentException;
 use panix\engine\data\Widget;
 use panix\engine\Html;
 use panix\mod\wishlist\components\WishListComponent;
-use yii\base\InvalidArgumentException;
-use yii\web\View;
+use panix\mod\wishlist\models\WishList;
+use panix\mod\wishlist\WishListAsset;
 
 /**
  * Widget add to wishlist module for shop.
@@ -63,7 +62,9 @@ class WishListWidget extends Widget
 
         $refrect = new \ReflectionClass($this->model);
 
-        $asset = WishListAsset::register($this->view);
+        if (!Yii::$app->request->isPjax) {
+            $asset = WishListAsset::register($this->view);
+        }
         $ids = Yii::$app->getModule('wishlist')->getIds();
 
         $this->isAdded = (in_array($this->model->getPrimaryKey(), $ids)) ? true : false;
