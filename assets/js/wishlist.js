@@ -21,7 +21,7 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    $('.countWishList').html(data.count ? data.count : '');
+                    $('.wishlist-count').html(data.count ? data.count : '');
                     common.notify(data.message, 'success');
                     if (data.action === 'remove') {
                         $('#wishlist-item-' + data.id).remove();
